@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.8)
+project(my_cpp_pkg)
+
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(example_interfaces REQUIRED)
+find_package(my_robot_interfaces REQUIRED)
+
+add_executable(my_cpp_node src/my_first_node.cpp)
+add_executable(robot_news_station src/robot_news_station.cpp)
+add_executable(smartphone src/smartphone.cpp)
+add_executable(add_two_ints_cl_noop src/add_two_ints_cl_noop.cpp)
+add_executable(add_two_ints_server src/add_two_ints_server.cpp)
+add_executable(add_two_ints_client src/add_two_ints_cl.cpp)
+
+ament_target_dependencies(add_two_ints_client rclcpp example_interfaces)
+ament_target_dependencies(add_two_ints_cl_noop rclcpp example_interfaces)
+ament_target_dependencies(add_two_ints_server rclcpp example_interfaces)
+ament_target_dependencies(smartphone rclcpp example_interfaces)
+ament_target_dependencies(robot_news_station rclcpp example_interfaces)
+ament_target_dependencies(my_cpp_node rclcpp)
+
+install (TARGETS 
+  my_cpp_node
+  robot_news_station
+  smartphone
+  add_two_ints_server
+  add_two_ints_cl_noop
+  add_two_ints_client
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+
+ament_package()
